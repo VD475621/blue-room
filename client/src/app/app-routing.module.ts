@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ListchatComponent } from './components/listchat/listchat.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'login',  pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
   { path:'chat', component:ListchatComponent}
 ];
