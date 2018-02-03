@@ -3,8 +3,8 @@ GO
 
 IF OBJECT_ID (N'DEMANDE',N'U') IS NOT NULL
 DROP TABLE DEMANDE
-IF OBJECT_ID (N'UMESSAGE',N'U') IS NOT NULL
-DROP TABLE UMESSAGE
+IF OBJECT_ID (N'U_MESSAGE',N'U') IS NOT NULL
+DROP TABLE U_MESSAGE
 IF OBJECT_ID (N'CHAT',N'U') IS NOT NULL
 DROP TABLE CHAT
 IF OBJECT_ID (N'USERS',N'U') IS NOT NULL
@@ -14,34 +14,35 @@ DROP TABLE USERS
 
 
 CREATE TABLE USERS (
+	U_ID INT IDENTITY(1,1) NOT NULL,
     Username varchar(20) NOT NULL,
-    Passwd varchar(20) NOT NULL,
-	AccountType varchar(1) NOT NULL
- PRIMARY KEY (Username)
+    Passwd varchar(60) NOT NULL,
+	AccountType char NOT NULL
+ PRIMARY KEY (U_ID)
 );
 
 CREATE TABLE CHAT (
-    User1 varchar(20) NOT NULL,
-	User2 varchar(20) NOT NULL,
-	ChatId int NOT NULL IDENTITY(1,1)
+    U_ID1 INT NOT NULL,
+	U_ID2 INT NOT NULL,
+	ChatId INT NOT NULL IDENTITY(1,1)
 	PRIMARY KEY (ChatId)
-	FOREIGN KEY (User1) REFERENCES USERS(Username),
-	FOREIGN KEY (User2) REFERENCES USERS(Username)
+	FOREIGN KEY (U_ID1) REFERENCES USERS(U_ID),
+	FOREIGN KEY (U_ID2) REFERENCES USERS(U_ID)
 );
 
-CREATE TABLE UMESSAGE (
-    Sender varchar(20) NOT NULL,
+CREATE TABLE U_MESSAGE (
+    Sender_ID INT NOT NULL,
     Content varchar(200),
 	SendTime datetime,
-	Receiver varchar(20) NOT NULL
-	FOREIGN KEY (Sender) REFERENCES USERS(Username),
-	FOREIGN KEY (Receiver) REFERENCES USERS(Username)
+	Receiver_ID INT NOT NULL
+	FOREIGN KEY (Sender_ID) REFERENCES USERS(U_ID),
+	FOREIGN KEY (Receiver_ID) REFERENCES USERS(U_ID)
 );
 
 CREATE TABLE DEMANDE (
-	Client varchar(20) NOT NULL,
+	UD_ID INT NOT NULL,
     AskTime datetime
-	FOREIGN KEY (Client) REFERENCES USERS(Username)
+	FOREIGN KEY (UD_ID) REFERENCES USERS(U_ID)
 );
 
 
@@ -62,11 +63,11 @@ INSERT INTO UMESSAGE(Sender, Content,SendTime, Receiver) /* Creation Message*/
 VALUES(Nom1, DATA, GETDATE(), Nom2)
 */
 
- 
+ /*
 INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
-VALUES('Helper1', 'NicePasswordTM', 'H')
+VALUES('Helper1', PWDENCRYPT('NicePasswordTM'), 'H')
 INSERT INTO USERS(Username,Passwd,AccountType)/*Creation User*/
-VALUES('User1', 'MomImGay', 'U')
+VALUES('User1', PWDENCRYPT('Test'), 'U')
 
 INSERT INTO DEMANDE(Client,AskTime)/* Creation Demande*/
 VALUES('User1', GETDATE())
@@ -86,3 +87,9 @@ SELECT * from UMESSAGE where UMESSAGE.Sender=Nom or UMESSAGE.Receiver=Nom order 
 */
 
 
+*/
+
+INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Users*/
+VALUES('UserTest','$2y$12$g3j2DjrZLF6GyfOebhoig.S1HGUqU2/dmv20RVPtzWzSF6kyMoUa.', 'U')
+INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
+VALUES('HelperTest','$2y$12$41pCkEHWonSzEU8je42XVuGVbP2roRNhFnm3qv.2slpkR7.TyXTE6', 'H')
