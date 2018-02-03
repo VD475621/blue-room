@@ -23,7 +23,15 @@ app.use(bodyParser.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-  req.sql("SELECT U.UserID, U.Username, U.Passwd, U.AccountType from USERS as U order by U.UserID for json path").fail(genFail).into(res);
+  res.setHeader('Content-Type', 'application/json');
+  res.send({hello: 'world'})
+});
+
+app.get('/users', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  req.sql("SELECT U.UserID, U.Username, U.Passwd, U.AccountType from USERS as U order by U.UserID for json path")
+  .fail(genFail)
+  .into(res);
 })
 
 app.listen(process.env.PORT || 8081)
