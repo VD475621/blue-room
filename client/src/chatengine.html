@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<meta http-equiv='X-UA-Compatible' content='ie=edge'>
+<title>Blueroom</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+  <ul id='messages'></ul>
+  <input type="text" id="user" placeholder="Pseudonyme">
+  <input type="text" id="chatroom" placeholder="ChatRoom">
+  <form action=''>
+    <input id='textMessage' autocomplete='off' /><button>Envoyer</button>
+  </form>
+</body>
+<script src='/socket.io/socket.io.js'></script>
+<script src='./node_modules/axios/dist/axios.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/fr-ca.js" integrity="sha256-R03dMkojNlV7dKBBhpcwG9tTtLB5OxoR4wLKsLrkeXo=" crossorigin="anonymous"></script>
+<script>
+  let socket = io()
+  let form = document.querySelector('form')
+  let user = document.querySelector("#user")
+  let chatroom = document.querySelector("#chatroom")
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault()
+    let txt = document.querySelector('#textMessage').value
+    socket.emit('chatMessage', `${user.value} : ${txt}`)
+    return false
+  })
+  socket.on('chatMessage', function(msg) {
+    let now = moment()
+    let ul = document.querySelector('#messages')
+    let nowStr = now.format('D MMMM YYYY, h:mm:ss')
+    let html = `<div class='entry'><span class='message'>${msg}</span><span class='time'>${nowStr}</span></div>`
+    ul.innerHTML += html
+  })
+
+  user.addEventListener('change', connectUserToChatroom)
+  chatroom.addEventListener('change', connectUserToChatroom)
+
+  function connectUserToChatroom(e) {
+    if (user.value && chatroom.value) {
+      socket.emit('setUserChatroom', {user: user.value, chatroom: chatroom.value})
+    }
+  }
+
+  window.onunload = function() {
+    socket.emit('exitChatroom', user.value)
+  }
+</script>
+</html>
