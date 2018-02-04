@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import {DataService} from '../../services/data.service'
+import {DataService} from '../../services/data.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { AuthService } from "angular4-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "angular4-social-login";
+import { SocialUser } from "angular4-social-login";
+
 
 @Component({
   selector: 'app-login',
@@ -13,7 +19,10 @@ export class LoginComponent implements OnInit {
 
   alluser: any;
 
-  constructor(private dataService: DataService) { }
+  private user: SocialUser;
+  private loggedIn: boolean;
+
+  constructor(private dataService: DataService, private authService: AuthService, private route: Router) { }
 
   ngOnInit() {
     this.dataService.GetData('http://localhost:8081/users')
@@ -25,6 +34,18 @@ export class LoginComponent implements OnInit {
         console.error(e);
       }
     );
+
+    
   }
 
+  UseFaceBook() {
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
+    .then(() => {
+      this.route.navigate(['/chat']);
+    });
+  }
+
+  signOut(): void {
+    this.authService.signOut();
+  }
 }

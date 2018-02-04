@@ -1,4 +1,9 @@
 export class ChatModel {
-    messages: string[];
+    messages: Message[];
     id: number;
+}
+
+export class Message {
+    message: string;
+    date: Date;
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../services/data.service';
+import { ChatModel } from '../../models/chatModel';
 
 @Component({
   selector: 'app-chat',
@@ -6,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  chat: ChatModel;
 
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+  }
+
+  GetMessage() {
+    setInterval(() => { this.RefreshMessage(); }, 5000);
+  }
+
+  RefreshMessage(){
+    this.dataService.GetData('').subscribe(r => { this.chat = r as ChatModel; });
   }
 
 }

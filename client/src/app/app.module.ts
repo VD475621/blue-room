@@ -13,6 +13,16 @@ import { ListchatComponent } from './components/listchat/listchat.component';
 import { LoginComponent } from './components/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { SocialLoginModule, AuthServiceConfig } from "angular4-social-login";
+import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-login";
+ 
+const config = new AuthServiceConfig([
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("174193133309943")
+  }
+]);
+
 
 @NgModule({
   declarations: [
@@ -24,7 +34,8 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    SocialLoginModule.initialize(config)
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
