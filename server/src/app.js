@@ -165,7 +165,7 @@ io.on('connection', function(socket) {
   })
 })
 
-http.listen(process.env.PORT || 8081)
+http.listen(process.env.PORT || 8081, '192.168.108.130')
 
 genFail = function(ex, res) { 
   res.statusCode = 500;   
