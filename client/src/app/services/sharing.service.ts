@@ -9,12 +9,20 @@ export class SharingService {
   private room = new BehaviorSubject<string>(null);
   roomCurrent = this.room.asObservable();
 
+  private chats = new BehaviorSubject<any>(null);
+  chatsCurrent = this.chats.asObservable();
+
   constructor() { }
+  
   changeMessage(message: UserModel) {
     this.messageSource.next(message)
   }
 
   ChangeRoom(message: string) {
+    this.room.next(message)
+  }
+
+  ChangeChats(message: any) {
     this.room.next(message)
   }
 }

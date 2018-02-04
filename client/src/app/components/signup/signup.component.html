@@ -1,7 +1,7 @@
 <div class="container">
   <div class=jumbotron>
     <h2>Veuiller entrer vos Informations pout vous s'inscrire</h2>
-    <form  #f="ngForm" (ngSubmit)="Signup(f)" novalidate>
+    <form  #f="ngForm" (ngSubmit)="Signup(f)">
         <div class="form-group">
           <label for="exampleInputUsername">Nom d'Utilisateur</label>
           <input name="username" ngModel type="text" class="form-control" id="exampleInputUsername" placeholder="Entrer un Nom">
@@ -19,7 +19,7 @@
           <input name="confirm_password" ngModel type="password" class="form-control" id="exampleInputPassword2" placeholder="Mot de Passe">
         </div>
         <div class="form-group">
-            Veux etre Aider
+            Veux être Aider
             <label class="switch">
                 <input name="isHelper" ngModel  type="checkbox">
                 <span class="slider round"></span>

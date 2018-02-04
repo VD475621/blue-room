@@ -19,8 +19,7 @@ export class ListdemandeComponent implements OnInit {
   ngOnInit() {
     this.listDemande = [];
   }
-
-
+  
   GetAllDemande() {
     this.dataService.GetData(`${environment.UrlBase}/demandes`)
     .subscribe(

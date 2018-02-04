@@ -26,7 +26,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    this.chatService.sendMessage(this.userShared.username + ' : ' +this.message);
+    const content = this.userShared.username + ' : ' +this.message;
+    this.chatService.sendMessage(content);
+    this.dataService.PostData(`${environment.UrlBase}/message`, {chatid: this.chat.id, userid: this.userShared.id, content: content})
+    .subscribe();
     this.message = '';
 
   }
