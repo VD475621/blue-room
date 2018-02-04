@@ -4,6 +4,8 @@ import { UserModel } from '../../models/user';
 
 import {NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { SharingService } from '../../services/sharing.service';
 
 
 @Component({
@@ -12,12 +14,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-
+  f: NgForm
   user: UserModel;
-  constructor(private dataService: DataService, private router: Router) { }
+  constructor(private dataService: DataService, private router: Router, private share: SharingService) { 
+  }
 
   ngOnInit() {
-    this.user = new UserModel();
+    
   }
 
   Signup(f: NgForm) {
@@ -30,7 +33,7 @@ export class SignupComponent implements OnInit {
     if (this.user.email !== '' && this.user.username !== '' && this.user.password !== '' && this.user.confirm_password !== '') {
       if (this.DoesUsernameCanBeUse(this.user.username)) {
         if (this.user.password === this.user.confirm_password) {
-          this.dataService.PostData('', {
+          this.dataService.PostData(`${environment.UrlBase}/user`, {
             username: this.user.username,
             password: this.user.password,
             email: this.user.email,

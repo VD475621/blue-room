@@ -9,6 +9,7 @@ import { SocialUser } from "angular4-social-login";
 import { environment } from '../../../environments/environment';
 import { UserModel } from '../../models/user';
 import { SharingService } from '../../services/sharing.service';
+import { NgModel } from '@angular/forms/src/directives/ng_model';
 
 
 @Component({
@@ -17,8 +18,9 @@ import { SharingService } from '../../services/sharing.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: string;
+  email: string;
   password: string;
+  user_signin: UserModel;
   
   private user: SocialUser;
   private loggedIn: boolean;
@@ -29,10 +31,13 @@ export class LoginComponent implements OnInit {
    
   }
 
-  Login() {
+  Login(f: NgModel) {
+    this.email = f.value.email;
+    this.password = f.value.password;
     if (this.GoodUser) {
       const user = new UserModel;
-      user.username = this.username;
+      user.email = this.email;
+      user.password = this.password;
       user.isHelper = this.IsHelper();
       this.sharing.changeMessage(user);
       
@@ -45,7 +50,20 @@ export class LoginComponent implements OnInit {
   }
   
   GoodUser(): boolean {
-    return true;
+    let resp : boolean;
+
+    this.dataService.PostData(`${environment.UrlBase}/login`, {email: this.email, password: this.password})
+    .subscribe(
+      r => {
+        resp = r;
+       // this.user_signin = r as UserModel;
+      },
+      e => {
+        console.error(e);
+      }
+    )
+    
+    return resp;
   }
 
   IsHelper(): boolean {
@@ -59,13 +77,11 @@ export class LoginComponent implements OnInit {
         this.user = user;
         this.loggedIn = (user != null);
         if (this.loggedIn) {
-          
           const new_user = new UserModel;
-
           new_user.username = this.user.name;
           new_user.email = user.email;
-          new_user.isHelper = this.IsHelper();
           this.sharing.changeMessage(new_user);
+          this.route.navigate(['demande']);
         }
       });
     });

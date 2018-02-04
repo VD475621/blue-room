@@ -26,8 +26,6 @@ export class ListchatComponent implements OnInit {
   ngOnInit() {
     this.chats = [];
 
-
-    
   }
 
   OpenChat(chat) {
