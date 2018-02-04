@@ -1,3 +1,9 @@
-<p>
-  chat works!
-</p>
+<div class="container">
+    <div class="jumbotron">
+      <p *ngFor="let msg of messages">{{msg.user.username}} : {{msg.message}}</p>
+    </div>
+    <div>
+      <textarea></textarea>
+      <button (click)="SendMsg()">Envoyer</button>
+    </div>
+</div>
