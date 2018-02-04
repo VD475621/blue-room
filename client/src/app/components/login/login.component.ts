@@ -59,16 +59,13 @@ export class LoginComponent implements OnInit {
         this.user = user;
         this.loggedIn = (user != null);
         if (this.loggedIn) {
+          
           const new_user = new UserModel;
+
           new_user.username = this.user.name;
+          new_user.email = user.email;
           new_user.isHelper = this.IsHelper();
           this.sharing.changeMessage(new_user);
-          
-          if (new_user.isHelper) {
-            this.route.navigate(['/demande_aide']);
-          } else {
-            this.route.navigate(['/demande']);
-          }
         }
       });
     });

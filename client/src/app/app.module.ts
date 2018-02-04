@@ -20,6 +20,7 @@ import { SharingService } from './services/sharing.service';
 import { ChatService } from './services/chat.service';
 import { DemandeComponent } from './components/demande/demande.component';
 import { ListdemandeComponent } from './components/listdemande/listdemande.component';
+import { SignupFacebookComponent } from './components/signup-facebook/signup-facebook.component';
  
 const config = new AuthServiceConfig([
   {
@@ -37,7 +38,8 @@ const config = new AuthServiceConfig([
     LoginComponent,
     SignupComponent,
     DemandeComponent,
-    ListdemandeComponent
+    ListdemandeComponent,
+    SignupFacebookComponent
   ],
   imports: [
     BrowserModule,

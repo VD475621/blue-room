@@ -25,7 +25,7 @@ app.use(cors())
 
 app.get('/', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.send({hello: 'world'})
+  res.send({root: 'root'})
 });
 
 app.get('/users', (req, res) => {
@@ -37,37 +37,86 @@ app.get('/users', (req, res) => {
 
 // create user
 app.post('/user', (req, res) => {
-  
+  var user = req.body.username;
+  var email = req.body.email;
+  var password = req.body.password;
+  var ishelper = req.body.ishelper;
+  var help = (ishelper) ? "1" : "0";
+
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`INSERT INTO USERS(Username,Couriel,Passwd,IsHelper) VALUES('${user}','${email}','${password}','${help}') for json path`)
+  .fail(genFail)
+  .into(res)
 });
 
 // find user for login
-app.post('/user/find', (req, res) => {
-  
+app.post('/login', (req, res) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`SELECT CASE WHEN EXISTS (SELECT * FROM [USERS] WHERE Couriel = '${email}' and Passwd = '${password}') THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END  for json path`)
+  .fail(genFail)
+  .into(res)
 });
 
 // is helper
+app.get('/is_help/:email', (req, res) => {
+  var email = req.params.email;
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`SELECT USERS.IsHelper FROM USERS WHERE USERS.Couriel='${email}'  for json path`)
+  .fail(genFail)
+  .into(res)
+});
 
 //create room(chat)
-
-// create user with facebook
+app.post('/room', (req, res) => {
+  var u1 = req.body.u1;
+  var u2 = req.body.u2;
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`INSERT INTO CHAT(U_ID1,U_ID2) VALUES('${u1}','${u2}') for json path`)
+  .fail(genFail)
+  .into(res)
+  
+});
 
 // create demande
 app.post('/demande', (req, res) => {
-  
+  var user = req.body.username;
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`INSERT INTO DEMANDE(UD_ID,AskTime) VALUES((SELECT U_ID from USERS WHERE USERS.Username='${user}'), GETDATE()) for json path`)
+  .fail(genFail)
+  .into(res)
 });
 
 // get all demande
 app.get('/demandes', (req, res) => {
-  
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`SELECT * FROM DEMANDE WHERE Active='1' for json path`)
+  .fail(genFail)
+  .into(res)
+
 });
 
 // insert message
 app.post('/message', (req, res) => {
+  var chatid = req.body.chatid;
+  var userid = req.body.userid;
+  var content = req.body.content;
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`INSERT INTO U_MESSAGE(Chat_ID,S_ID,Content,SendTime) VALUES( '${chatid}','${userid}' ,'${content}', GETDATE()) for json path`)
+  .fail(genFail)
+  .into(res)
   
 });
 
 // get messages
-app.get('/messages', (req, res) => {
+app.get('/messages/:chatid', (req, res) => {
+  var chatid = req.params.chatid;
+
+  res.setHeader('Content-Type', 'application/json');
+  req.sql(`SELECT * FROM U_MESSAGE WHERE(SendTime IN (SELECT TOP (20) SendTime FROM U_MESSAGE WHERE Chat_ID ='${chatid}' ORDER BY SendTime DESC)) ORDER BY SendTime for json path`)
+  .fail(genFail)
+  .into(res)
   
 });
 

@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { UserModel } from '../../models/user';
 
 import {NgForm} from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,7 +14,7 @@ import {NgForm} from '@angular/forms';
 export class SignupComponent implements OnInit {
 
   user: UserModel;
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private router: Router) { }
 
   ngOnInit() {
     this.user = new UserModel();
@@ -33,14 +34,15 @@ export class SignupComponent implements OnInit {
             username: this.user.username,
             password: this.user.password,
             email: this.user.email,
-            isHelper: this.user.isHelper
+            ishelper: this.user.isHelper
           })
           .subscribe( r => {
-
+            this.router.navigate(['login']);
           },
-        e => {
-          console.error(e);
-        })
+          e => {
+            console.error(e);
+            alert('Echec de l\'inscription!');
+          });
         }
       }
     }
