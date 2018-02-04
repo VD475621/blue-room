@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { SocialLoginModule, AuthServiceConfig } from "angular4-social-login";
 import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-login";
+import { SignupComponent } from './components/signup/signup.component';
  
 const config = new AuthServiceConfig([
   {
@@ -29,10 +30,12 @@ const config = new AuthServiceConfig([
     AppComponent,
     ChatComponent,
     ListchatComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     SocialLoginModule.initialize(config)
