@@ -45,6 +45,10 @@ app.post('/user/find', (req, res) => {
   
 });
 
+// is helper
+
+//create room(chat)
+
 // create user with facebook
 
 // create demande
@@ -54,6 +58,16 @@ app.post('/demande', (req, res) => {
 
 // get all demande
 app.get('/demandes', (req, res) => {
+  
+});
+
+// insert message
+app.post('/message', (req, res) => {
+  
+});
+
+// get messages
+app.get('/messages', (req, res) => {
   
 });
 

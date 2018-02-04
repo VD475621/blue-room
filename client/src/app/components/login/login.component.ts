@@ -31,10 +31,16 @@ export class LoginComponent implements OnInit {
 
   Login() {
     if (this.GoodUser) {
-      this.route.navigate(['/demande']);
       const user = new UserModel;
       user.username = this.username;
+      user.isHelper = this.IsHelper();
       this.sharing.changeMessage(user);
+      
+      if (user.isHelper) {
+        this.route.navigate(['/demande_aide']);
+      } else {
+        this.route.navigate(['/demande']);
+      }
     }
   }
   
@@ -42,17 +48,27 @@ export class LoginComponent implements OnInit {
     return true;
   }
 
+  IsHelper(): boolean {
+    return true;
+  }
+
   UseFaceBook() {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
     .then(() => {
-      this.route.navigate(['/demande']);
       this.authService.authState.subscribe((user) => {
         this.user = user;
         this.loggedIn = (user != null);
         if (this.loggedIn) {
           const new_user = new UserModel;
           new_user.username = this.user.name;
+          new_user.isHelper = this.IsHelper();
           this.sharing.changeMessage(new_user);
+          
+          if (new_user.isHelper) {
+            this.route.navigate(['/demande_aide']);
+          } else {
+            this.route.navigate(['/demande']);
+          }
         }
       });
     });
