@@ -17,6 +17,8 @@ import { SocialLoginModule, AuthServiceConfig } from "angular4-social-login";
 import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-login";
 import { SignupComponent } from './components/signup/signup.component';
 import { SharingService } from './services/sharing.service';
+import { ChatService } from './services/chat.service';
+import { WebsocketService } from './services/websocket.service';
  
 const config = new AuthServiceConfig([
   {
@@ -41,7 +43,7 @@ const config = new AuthServiceConfig([
     HttpClientModule,
     SocialLoginModule.initialize(config)
   ],
-  providers: [DataService, SharingService],
+  providers: [DataService, SharingService, ChatService, WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
