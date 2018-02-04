@@ -28,8 +28,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   sendMessage() {
     const content = this.userShared.username + ' : ' +this.message;
     this.chatService.sendMessage(content);
-    this.dataService.PostData(`${environment.UrlBase}/message`, {chatid: this.chat.id, userid: this.userShared.id, content: content})
-    .subscribe();
+    //this.dataService.PostData(`${environment.UrlBase}/message`, {chatid: this.chat.id, userid: this.userShared.id, content: content})
+    //.subscribe();
     this.message = '';
 
   }
@@ -41,6 +41,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.messages.push(message);
       });
       this.chatService.EnterRoom({user: `${this.userShared.username}`, chatroom: this.roomShared});
+  }
+  Quit() {
+    this.chatService.QuitRoom(this.userShared.username);
   }
 
   ngOnDestroy() {

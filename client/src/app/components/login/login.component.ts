@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
           new_user.username = this.user.name;
           new_user.email = user.email;
           this.sharing.changeMessage(new_user);
-          this.route.navigate(['signup_fb']);
+          this.route.navigate(['demande']);
         }
       });
     });
