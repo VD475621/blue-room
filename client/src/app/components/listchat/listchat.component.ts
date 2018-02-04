@@ -4,6 +4,9 @@ import { ChatModel } from '../../models/chatModel'
 import { SocialUser } from "angular4-social-login";
 import { AuthService } from "angular4-social-login";
 import { DataService } from '../../services/data.service';
+import { SharingService } from '../../services/sharing.service';
+import { UserModel } from '../../models/user';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-listchat',
@@ -13,23 +16,34 @@ import { DataService } from '../../services/data.service';
 export class ListchatComponent implements OnInit {
   chats: ChatModel[];
 
-  private user: SocialUser;
-  private loggedIn: boolean;
+  userShared: UserModel;
+  selectedChat: ChatModel;
 
-  constructor(private authService: AuthService, private dataService: DataService) { }
+  constructor(private authService: AuthService, private dataService: DataService, private sharing: SharingService) {
+    this.sharing.currentMessage.subscribe(user => this.userShared = user)
+   }
 
   ngOnInit() {
     this.chats = [];
 
 
-    this.authService.authState.subscribe((user) => {
-      this.user = user;
-      this.loggedIn = (user != null);
-    });
+    
+  }
+
+  OpenChat(chat) {
+    this.selectedChat = chat;
   }
 
   GetOpenChat() {
+    this.dataService.GetData(`${environment.UrlBase}/getchats?userid=${this.userShared.id}`)
+    .subscribe(
+      r => {
 
+      },
+      e => {
+        console.error(e);
+      }
+    );
   }
 
 }

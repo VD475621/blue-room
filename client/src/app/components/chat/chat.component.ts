@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { ChatModel } from '../../models/chatModel';
 
@@ -8,7 +8,7 @@ import { ChatModel } from '../../models/chatModel';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  chat: ChatModel;
+  @Input()chat: ChatModel;
 
   constructor(private dataService: DataService) { }
 

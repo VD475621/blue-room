@@ -16,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SocialLoginModule, AuthServiceConfig } from "angular4-social-login";
 import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-login";
 import { SignupComponent } from './components/signup/signup.component';
+import { SharingService } from './services/sharing.service';
  
 const config = new AuthServiceConfig([
   {
@@ -40,7 +41,7 @@ const config = new AuthServiceConfig([
     HttpClientModule,
     SocialLoginModule.initialize(config)
   ],
-  providers: [DataService],
+  providers: [DataService, SharingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
