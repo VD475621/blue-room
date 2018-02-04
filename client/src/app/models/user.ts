@@ -1,4 +1,8 @@
 export class UserModel {
     id: number;
-    name: string;
+    username: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+    isHelper: boolean;
 }
