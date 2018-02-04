@@ -1,0 +1,11 @@
+<div class="container">
+    <form #f="ngForm" (ngSubmit)="createDemande(f)">
+      <div class="form-group">
+        <label for="Room">Demande</label>
+        <input name="room" ngModel type="text" class="form-control" id="room"  >
+      </div>
+      <button type="submit" class="btn btn-primary">Creer Demande</button>
+
+    </form>
+
+</div>

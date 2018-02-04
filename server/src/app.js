@@ -35,9 +35,31 @@ app.get('/users', (req, res) => {
   .into(res)
 });
 
+// create user
+app.post('/user', (req, res) => {
+  
+});
+
+// find user for login
+app.post('/user/find', (req, res) => {
+  
+});
+
+// create user with facebook
+
+// create demande
+app.post('/demande', (req, res) => {
+  
+});
+
+// get all demande
+app.get('/demandes', (req, res) => {
+  
+});
+
 //TODO: Properly set this up
 app.get('/chatrooms', function(req, res){
-  res.sendFile(__dirname + "/../client/src/chatengine.html")
+  res.sendFile("D:/Documents/Git/team-du-desespoir/client/src/chatengine.html")
 })
 
 //Socket.io chatroom
@@ -56,6 +78,7 @@ io.on('connection', function(socket) {
     socket.join(data.chatroom)
     io.to(data.chatroom).emit('chatMessage', `${data.user} a rejoint le chat ${data.chatroom}.`)
   })
+
   socket.on('chatMessage', function(msg){
     let keys = Object.keys(io.sockets.adapter.sids[socket.id])
     for (const room of keys) {
@@ -64,6 +87,7 @@ io.on('connection', function(socket) {
       }
     }
   })
+
   socket.on('exitChatroom', function(user) {
     let keys = Object.keys(io.sockets.adapter.sids[socket.id])
     for (const room of keys) {
@@ -72,6 +96,7 @@ io.on('connection', function(socket) {
       }
     }
   })
+  
   socket.on('disconnect', function() {
     console.log('user disconnected')
   })
