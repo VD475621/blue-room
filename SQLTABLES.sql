@@ -31,12 +31,10 @@ CREATE TABLE CHAT (
 );
 
 CREATE TABLE U_MESSAGE (
-    Sender_ID INT NOT NULL,
-    Content varchar(200),
-	SendTime datetime,
-	Receiver_ID INT NOT NULL
-	FOREIGN KEY (Sender_ID) REFERENCES USERS(U_ID),
-	FOREIGN KEY (Receiver_ID) REFERENCES USERS(U_ID)
+    Chat_ID INT NOT NULL,
+    Content varchar(1000),
+	SendTime datetime
+	FOREIGN KEY (Chat_Id) REFERENCES CHAT(ChatId)
 );
 
 CREATE TABLE DEMANDE (
@@ -46,7 +44,7 @@ CREATE TABLE DEMANDE (
 );
 
 
-/*
+/* USELESS BACKUP
 INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
 VALUES(Nom, mdp, 'H')
 INSERT INTO USERS(Username,Passwd,AccountType)/*Creation User*/
@@ -93,3 +91,18 @@ INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Users*/
 VALUES('UserTest','$2y$12$g3j2DjrZLF6GyfOebhoig.S1HGUqU2/dmv20RVPtzWzSF6kyMoUa.', 'U')
 INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
 VALUES('HelperTest','$2y$12$41pCkEHWonSzEU8je42XVuGVbP2roRNhFnm3qv.2slpkR7.TyXTE6', 'H')
+
+
+/* REQUEST QUE TU AURA BESOIN
+INSERT INTO DEMANDE(UD_ID,AskTime)
+VALUES((SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM"), GETDATE())
+
+INSERT INTO CHAT(U_ID1,U_ID2)/*Un Helper est celui qui transforme une demande en chat*/
+VALUES((SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM DU HELPER"), (SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM DE LUSAGER"))
+DELETE * FROM DEMANDE WHERE UD_ID="VARIABLE DE NOM DE LUSAGER"
+
+SELECT ChatId from CHAT where ((U_ID1 = "ID USAGER1" or U_ID1 = "ID USAGER2") and((U_ID2 = "ID USAGER 1" or U_ID2 = "ID USAGER 2")))/*Get Chat ID*/
+
+INSERT INTO U_MESSAGE(Chat_ID,Content,SendTime)
+VALUES( "VARIABLE DU ID DU CHAT", "USERNAME : " + "VARIABLE CONTENANT LE MESSAGE", GETDATE())
+*/
