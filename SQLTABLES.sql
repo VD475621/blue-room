@@ -1,6 +1,8 @@
 USE [BlueDat]
 GO
 
+IF OBJECT_ID (N'RATING',N'U') IS NOT NULL
+DROP TABLE RATING
 IF OBJECT_ID (N'DEMANDE',N'U') IS NOT NULL
 DROP TABLE DEMANDE
 IF OBJECT_ID (N'U_MESSAGE',N'U') IS NOT NULL
@@ -17,7 +19,8 @@ CREATE TABLE USERS (
 	U_ID INT IDENTITY(1,1) NOT NULL,
     Username varchar(20) NOT NULL,
     Passwd varchar(60) NOT NULL,
-	AccountType char NOT NULL
+	IsHelper bit NOT NULL,
+	Couriel varchar(50) NOT NULL
  PRIMARY KEY (U_ID)
 );
 
@@ -32,9 +35,11 @@ CREATE TABLE CHAT (
 
 CREATE TABLE U_MESSAGE (
     Chat_ID INT NOT NULL,
+	S_ID INT NOT NULL,
     Content varchar(1000),
 	SendTime datetime
-	FOREIGN KEY (Chat_Id) REFERENCES CHAT(ChatId)
+	FOREIGN KEY (Chat_Id) REFERENCES CHAT(ChatId),
+	FOREIGN KEY (S_ID) REFERENCES USERS(U_ID)
 );
 
 CREATE TABLE DEMANDE (
@@ -43,66 +48,95 @@ CREATE TABLE DEMANDE (
 	FOREIGN KEY (UD_ID) REFERENCES USERS(U_ID)
 );
 
-
-/* USELESS BACKUP
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
-VALUES(Nom, mdp, 'H')
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation User*/
-VALUES(Nom, mdp, 'U')
-
-INSERT INTO DEMANDE(DUser,AskTime)/* Creation Demande*/
-VALUES(Nom, GETDATE())
-
-INSERT INTO CHAT(User1,User2) /* Creation Chat*/
-VALUES(Nom1,Nom2)
-DELETE * from DEMANDE where Users.Username=Nom /*Destruction demande */
-
-INSERT INTO UMESSAGE(Sender, Content,SendTime, Receiver) /* Creation Message*/
-VALUES(Nom1, DATA, GETDATE(), Nom2)
-*/
-
- /*
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
-VALUES('Helper1', PWDENCRYPT('NicePasswordTM'), 'H')
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation User*/
-VALUES('User1', PWDENCRYPT('Test'), 'U')
-
-INSERT INTO DEMANDE(Client,AskTime)/* Creation Demande*/
-VALUES('User1', GETDATE())
-
-INSERT INTO CHAT(User1,User2) /* Creation Chat*/
-VALUES('Helper1','User1')
-
-INSERT INTO UMESSAGE(Sender, Content,SendTime, Receiver) /* Creation Message*/
-VALUES('Helper1', 'ALLO MOMAN!', GETDATE(), 'User1')
+CREATE TABLE RATING (
+	H_ID INT IDENTITY(1,1) NOT NULL,
+	Evaluation int,
+	Feedback varchar(1000) 
+ FOREIGN KEY (H_ID) REFERENCES USERS(U_ID)
+);
 
 
-/* GET LINES
-SELECT * from USERS
-SELECT * from DEMANDE
-SELECT * FROM CHAT where CHAT.User1=Nom or CHAT.User2=Nom
-SELECT * from UMESSAGE where UMESSAGE.Sender=Nom or UMESSAGE.Receiver=Nom order by UMESSAGE.SendTime
-*/
+
+INSERT INTO USERS(Username,Couriel,Passwd,IsHelper)/*Creation Users*/
+VALUES('UserTest','ImAPony@gmail.com','$2y$12$g3j2DjrZLF6GyfOebhoig.S1HGUqU2/dmv20RVPtzWzSF6kyMoUa.', '0')
+INSERT INTO USERS(Username,Couriel,Passwd,IsHelper)/*Creation Helper*/
+VALUES('HelperTest','YouAreNotAPony@gmail.com','$2y$12$41pCkEHWonSzEU8je42XVuGVbP2roRNhFnm3qv.2slpkR7.TyXTE6', '1')
 
 
-*/
+/*
+/* INSERT */
 
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Users*/
-VALUES('UserTest','$2y$12$g3j2DjrZLF6GyfOebhoig.S1HGUqU2/dmv20RVPtzWzSF6kyMoUa.', 'U')
-INSERT INTO USERS(Username,Passwd,AccountType)/*Creation Helper*/
-VALUES('HelperTest','$2y$12$41pCkEHWonSzEU8je42XVuGVbP2roRNhFnm3qv.2slpkR7.TyXTE6', 'H')
+i1:User
+INSERT INTO USERS(Username,Couriel,Passwd,IsHelper)
+VALUES("VAR USERNAME","VAR COURIEL","VAR MDP",'0')
 
+i2:Helper
+INSERT INTO USERS(Username,Couriel,Passwd,IsHelper)
+VALUES("VAR USERNAME","VAR COURIEL","VAR MDP",'1')
 
-/* REQUEST QUE TU AURA BESOIN
+i3:Demande
 INSERT INTO DEMANDE(UD_ID,AskTime)
 VALUES((SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM"), GETDATE())
 
-INSERT INTO CHAT(U_ID1,U_ID2)/*Un Helper est celui qui transforme une demande en chat*/
-VALUES((SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM DU HELPER"), (SELECT U_ID from USERS WHERE USERS.Username="VARIABLE DE NOM DE LUSAGER"))
-DELETE * FROM DEMANDE WHERE UD_ID="VARIABLE DE NOM DE LUSAGER"
+i4:Chat
+INSERT INTO CHAT(U_ID1,U_ID2) /* Doit appeler D1 en meme temps */
+VALUES("ID Helper" ,"ID User")
 
-SELECT ChatId from CHAT where ((U_ID1 = "ID USAGER1" or U_ID1 = "ID USAGER2") and((U_ID2 = "ID USAGER 1" or U_ID2 = "ID USAGER 2")))/*Get Chat ID*/
+i5:Message
+INSERT INTO U_MESSAGE(Chat_ID,S_ID,Content,SendTime)
+VALUES( "VARIABLE DU ID DU CHAT","VARIABLE SENDER ID ,"VARIABLE CONTENANT LE MESSAGE", GETDATE())
 
-INSERT INTO U_MESSAGE(Chat_ID,Content,SendTime)
-VALUES( "VARIABLE DU ID DU CHAT", "USERNAME : " + "VARIABLE CONTENANT LE MESSAGE", GETDATE())
+i6:Rating
+INSERT INTO RATING()
+VALUES
+
+/*Get*/
+
+g1: Connection
+SELECT CASE WHEN EXISTS (
+    SELECT *
+    FROM [USERS]
+    WHERE Couriel = "Var Couriel" and Passwd = "Var Password"
+)
+THEN CAST(1 AS BIT)
+ELSE CAST(0 AS BIT) END
+
+g2: Get Last 20 messages from chat classed reversed
+SELECT *
+FROM U_MESSAGE
+WHERE
+(
+ SendTime IN
+ (
+  SELECT TOP (20) SendTime
+  FROM U_MESSAGE
+  WHERE Chat_ID ="Var Chat ID"
+  ORDER BY SendTime DESC
+ )
+)
+ORDER BY SendTime
+
+g3:Get UserNames of all users with a chat with current user
+SELECT U.Username 
+FROM USERS as U INNER JOIN CHAT as C ON (C.U_ID1="VAR U_ID")
+WHERE U.U_ID=C.U_ID2
+UNION
+SELECT U.Username 
+FROM USERS as U INNER JOIN CHAT as C ON (C.U_ID2="VAR U_ID")
+WHERE U.U_ID=C.U_ID1
+
+g4:Get Ratings from user
+SELECT Evaluation, Feedback
+FROM RATING
+WHERE H_ID = "VAR CURRENT USER"
+
+/*Delete*/
+
+d1: Demande
+DELETE * FROM DEMANDE WHERE UD_ID="User ID"
+
 */
+
+
+
+
