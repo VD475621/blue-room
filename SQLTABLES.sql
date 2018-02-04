@@ -44,6 +44,7 @@ CREATE TABLE U_MESSAGE (
 
 CREATE TABLE DEMANDE (
 	UD_ID INT NOT NULL,
+	Active bit default '1',
     AskTime datetime
 	FOREIGN KEY (UD_ID) REFERENCES USERS(U_ID)
 );
@@ -130,13 +131,23 @@ SELECT Evaluation, Feedback
 FROM RATING
 WHERE H_ID = "VAR CURRENT USER"
 
-/*Delete*/
+g5: Get Demandes en cours
+SELECT * 
+FROM DEMANDE
+WHERE Active='1'
 
-d1: Demande
-DELETE * FROM DEMANDE WHERE UD_ID="User ID"
+g6: Get helper or not
+SELECT USERS.IsHelper
+FROM USERS
+WHERE USERS.Couriel="Variable Couriel"
 
+/* UPDATE*/
+
+u1:Change active state for request
+UPDATE DEMANDE
+SET Active='0'
+WHERE UD_ID="Variable UserId" and Active='1'
 */
-
 
 
 
