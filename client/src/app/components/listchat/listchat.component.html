@@ -5,13 +5,13 @@
   </div>
   
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <ul>
           <li *ngFor="let c of chats" ></li>
         </ul>
       </div>
-      <div class="col-md-8">
-        <div *ngIf="selectedChat != null; else NotSelected">
+      <div class="col-md-9">
+        <div *ngIf="selectedChat == null; else NotSelected">
           <app-chat [chat]="selectedChat"></app-chat>
         </div>
         <ng-template #NotSelected>

@@ -4,12 +4,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { ListchatComponent } from './components/listchat/listchat.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { DemandeComponent } from './components/demande/demande.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login',  pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
-  { path: 'chat', component:ListchatComponent}
+  { path: 'chat', component: ListchatComponent},
+  { path: 'demande', component: DemandeComponent}
 ];
 
 @NgModule({

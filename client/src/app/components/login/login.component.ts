@@ -26,20 +26,12 @@ export class LoginComponent implements OnInit {
   constructor(private dataService: DataService, private authService: AuthService, private route: Router, private sharing: SharingService) { }
 
   ngOnInit() {
-    this.dataService.GetData(`${environment.UrlBase}/`)
-    .subscribe(
-      r => {
-
-      },
-      e => {
-        console.error(e);
-      }
-    );
+   
   }
 
   Login() {
     if (this.GoodUser) {
-      this.route.navigate(['/chat']);
+      this.route.navigate(['/demande']);
       const user = new UserModel;
       user.username = this.username;
       this.sharing.changeMessage(user);
@@ -53,7 +45,7 @@ export class LoginComponent implements OnInit {
   UseFaceBook() {
     this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
     .then(() => {
-      this.route.navigate(['/chat']);
+      this.route.navigate(['/demande']);
       this.authService.authState.subscribe((user) => {
         this.user = user;
         this.loggedIn = (user != null);
