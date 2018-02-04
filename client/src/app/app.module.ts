@@ -45,6 +45,7 @@ const config = new AuthServiceConfig([
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    HttpModule,
     HttpClientModule,
     SocialLoginModule.initialize(config)
   ],
